@@ -3,10 +3,13 @@ import os
 
 from dotenv import *
 from icecream import ic
+from datetime import datetime
+from time import time
+
 from src.utils.file import File
 
 class Instagram:
-    def __init__(self) -> None:
+    def __init__(self) -> {}:
         load_dotenv()
         self.__file = File()
         self.__COOKIES = os.getenv('COOKIE')
@@ -41,14 +44,68 @@ class Instagram:
         }
 
 
+    def extract_data(self, document: dict, search_key: str):
+
+        results = {
+            "crawling_time": str(datetime.now()),
+            "crawling_time_epoch": int(time()),
+            "search_key": search_key,
+            "status": document["status"],
+            "user": {
+                "username": document["user"]["username"],
+                "full_name": document["user"]["full_name"],
+                "is_private": document["user"]["is_private"],
+                "is_verified": document["user"]["is_verified"],
+                "profile_pic_id": document["user"]["profile_pic_id"],
+                "profile_pic_url": document["user"]["profile_pic_url"],
+                "contents": [
+                    {
+                        "taken_at": content.get("taken_at"),
+                        "id": content.get("id"),
+                        "commerciality_status": content.get("commerciality_status", None),
+                        "explore_hide_comments": content.get("explore_hide_comments", None),
+                        "is_quiet_post": content.get("is_quiet_post", None),
+                        "mezql_token": content.get("mezql_token", None),
+                        "tags": content.get("usertags", {}).get("in", [])[:1],
+                        "photo_of_you": content.get("photo_of_you", None),
+                        "has_liked": content.get("has_liked", None),
+                        "has_privately_liked": content.get("has_privately_liked", None),
+                        "like_count": content.get("like_count", None),
+                        "can_viewer_reshare": content.get("can_viewer_reshare", None),
+                        "video_subtitles": content.get("video_subtitles_uri", None),
+                        "captions": content.get("caption", {}).get("text", None),
+                        "play_count": content.get("play_count", None),
+                        "medias": {
+                            "images": content.get("image_versions2", {}).get("candidates", None),
+                            "videos": content.get("video_versions", None),
+                            "video_durations": content.get("video_duration", None),
+                            "audio": {
+                                "music_info": content.get("clips_metadata", {}).get("music_info", None),
+                                "audio_type": content.get("clips_metadata", {}).get("audio_type", None),
+                                "url": content.get("clips_metadata", {}).get("original_sound_info", {}).get("progressive_download_url", None),
+                                "should_mute_audio": content.get("clips_metadata", {}).get("original_sound_info", {}).get("should_mute_audio", None)
+                            }
+                        }
+                            
+                    } for content in document["items"]
+                ]
+            }
+        }
+
+        return results
+
+
     def main(self):
         # response = requests.get(url=self.__api, headers=self.headers)
-        response = requests.get(url='https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id=3223585292288501499_9884975657', headers=self.headers)
-        self.__file.write_json(path='private/response3.json', content=response.json())
+        # response = requests.get(url='https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id=3223585292288501499_9884975657', headers=self.headers)
+        # ic(response)
+        # ic(response.text)
+        # self.__file.write_json(path='private/response3.json', content=response.json())
 
-        ic(response)
 
-        # file = self.__file.read_json('private/response.json')
+        file = self.__file.read_json('private/response.json')
+        results = self.extract_data(document=file, search_key="freya")
+        self.__file.write_json(path='private/results.json', content=results)
 
         # ic(len(file['items']))
         
