@@ -1,11 +1,15 @@
 import requests
+import os
 
+from dotenv import *
 from icecream import ic
 from src.utils.file import File
 
 class Instagram:
     def __init__(self) -> None:
+        load_dotenv()
         self.__file = File()
+        self.__COOKIES = os.getenv('COOKIE')
 
         self.__main_api = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=150'
         self.__second_api = 'https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id=3223585292288501499_9884975657'
@@ -14,7 +18,7 @@ class Instagram:
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Cookie': 'ig_did=66CBC502-CDF4-45C6-ACA3-7F2EE7EF4825; datr=Vt2TZYPIJIRANZZ14FJ-c2Pw; mid=ZZPdXQALAAGOjDgp81yVxcyuzqW1; ig_nrcb=1; csrftoken=VqFUdHhunrwbNuPNn3UgjYlWYMPHrnwD; ds_user_id=63695345018; sessionid=63695345018%3Aknw7rIQahuLWOX%3A11%3AAYd7Xb-ukYzPdwEnHVCRc71xxbYbj_7wRBmtFkGGJA; shbid="4539\05463695345018\0541735725545:01f73fee8e4137bab98e0caf02e76b6c5e8821790ee0a694f376fa7fc16db1fd1f0d61f3"; shbts="1704189545\05463695345018\0541735725545:01f7c77db085ce4531e3ced4d2c3a11109bfc7ec1ae40ab1bc45439c8ef729c1efdbffef"; rur="PRN\05463695345018\0541735725685:01f76b02304df7855061d715d1364c1a64a71246b8310e48b07ac2cff5224f0d8ae8c7dc"',
+            'Cookie': str(self.__COOKIES),
             'Dpr': '2',
             'Referer': 'https://www.instagram.com/jkt48.freya/',
             'Sec-Ch-Prefers-Color-Scheme': 'dark',
