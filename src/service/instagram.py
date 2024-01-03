@@ -1,7 +1,11 @@
 import requests
+import asyncio
 import os
 
+from tqdm import tqdm
+from urllib import request
 from dotenv import *
+from uuid import uuid4
 from icecream import ic
 from datetime import datetime
 from time import time
@@ -43,8 +47,10 @@ class Instagram:
             'X-Requested-With': 'XMLHttpRequest'
         }
 
+    def __curl(self, path: str, url: str):
+        request.urlretrieve(url, path)
 
-    def extract_data(self, document: dict, search_key: str):
+    def extract_data(self, document: dict, search_key: str) -> dict:
 
         results = {
             "crawling_time": str(datetime.now()),
@@ -58,38 +64,41 @@ class Instagram:
                 "is_verified": document["user"]["is_verified"],
                 "profile_pic_id": document["user"]["profile_pic_id"],
                 "profile_pic_url": document["user"]["profile_pic_url"],
-                "contents": [
-                    {
-                        "taken_at": content.get("taken_at"),
-                        "id": content.get("id"),
-                        "commerciality_status": content.get("commerciality_status", None),
-                        "explore_hide_comments": content.get("explore_hide_comments", None),
-                        "is_quiet_post": content.get("is_quiet_post", None),
-                        "mezql_token": content.get("mezql_token", None),
-                        "tags": content.get("usertags", {}).get("in", [])[:1],
-                        "photo_of_you": content.get("photo_of_you", None),
-                        "has_liked": content.get("has_liked", None),
-                        "has_privately_liked": content.get("has_privately_liked", None),
-                        "like_count": content.get("like_count", None),
-                        "can_viewer_reshare": content.get("can_viewer_reshare", None),
-                        "video_subtitles": content.get("video_subtitles_uri", None),
-                        "captions": content.get("caption", {}).get("text", None),
-                        "play_count": content.get("play_count", None),
-                        "medias": {
-                            "images": content.get("image_versions2", {}).get("candidates", None),
-                            "videos": content.get("video_versions", None),
-                            "video_durations": content.get("video_duration", None),
-                            "audio": {
-                                "music_info": content.get("clips_metadata", {}).get("music_info", None),
-                                "audio_type": content.get("clips_metadata", {}).get("audio_type", None),
-                                "url": content.get("clips_metadata", {}).get("original_sound_info", {}).get("progressive_download_url", None),
-                                "should_mute_audio": content.get("clips_metadata", {}).get("original_sound_info", {}).get("should_mute_audio", None)
-                            }
+            },
+            "contents": [
+                {
+                    "taken_at": content.get("taken_at"),
+                    "id": content.get("id"),
+                    "commerciality_status": content.get("commerciality_status", None),
+                    "explore_hide_comments": content.get("explore_hide_comments", None),
+                    "is_quiet_post": content.get("is_quiet_post", None),
+                    "mezql_token": content.get("mezql_token", None),
+                    "tags": content.get("usertags", {}).get("in", [])[:1],
+                    "photo_of_you": content.get("photo_of_you", None),
+                    "has_liked": content.get("has_liked", None),
+                    "has_privately_liked": content.get("has_privately_liked", None),
+                    "like_count": content.get("like_count", None),
+                    "can_viewer_reshare": content.get("can_viewer_reshare", None),
+                    "video_subtitles": content.get("video_subtitles_uri", None),
+                    "captions": content.get("caption", {}).get("text", None),
+                    "play_count": content.get("play_count", None),
+                    "medias": {
+                        "carousel_media": [medias.get("image_versions2", {}).get("candidates", None) for medias in content.get("carousel_media", {})],
+                        "carousel_video": [medias["video_versions"] for medias in content.get("carousel_media", {}) if medias.get("video_versions")],
+                        "images": content.get("image_versions2", {}).get("candidates", None),
+                        "videos": content.get("video_versions", None),
+                        "video_durations": content.get("video_duration", None),
+                        "audio": {
+                            "music_info": content.get("clips_metadata", {}).get("music_info", None),
+                            "audio_type": content.get("clips_metadata", {}).get("audio_type", None),
+                            "url": content.get("clips_metadata", {}).get("original_sound_info", {}).get("progressive_download_url", None),
+                            "should_mute_audio": content.get("clips_metadata", {}).get("original_sound_info", {}).get("should_mute_audio", None)
                         }
-                            
-                    } for content in document["items"]
-                ]
-            }
+                    }
+                        
+                } for content in document["items"]
+            ]
+            
         }
 
         return results
@@ -105,7 +114,41 @@ class Instagram:
 
         file = self.__file.read_json('private/response.json')
         results = self.extract_data(document=file, search_key="freya")
-        self.__file.write_json(path='private/results.json', content=results)
+
+
+        for content in tqdm(results["contents"], ascii=True, smoothing=0.1, total=len(results["contents"])):
+
+            if content["medias"]["videos"]:
+                self.__curl(
+                    url=content["medias"]["videos"][0]["url"],
+                    path=f"data/videos/{uuid4()}.mp4"
+                    )
+            
+                self.__curl(
+                    url=content["medias"]["audio"]["url"],
+                    path=f"data/audios/{uuid4()}.mp3"
+                    )
+
+            
+            if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
+
+                for medias in content["medias"]["carousel_media"]:
+                    max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
+                    self.__curl(
+                        url=max_resolution["url"],
+                        path=f"data/images/{uuid4()}.jpg"
+                        )
+                    
+                
+                for videos in content["medias"]["carousel_video"]:
+                    max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
+                    self.__curl(
+                        url=max_resolution["url"],
+                        path=f"data/videos/{uuid4()}.mp4"
+                        )
+
+
+        self.__file.write_json(path=f'data/json/{results["user"]["username"]}.json', content=results)
 
         # ic(len(file['items']))
         
