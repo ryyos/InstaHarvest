@@ -11,23 +11,31 @@ from datetime import datetime
 from time import time
 
 from src.utils.file import File
+from src.exceptions.ExpiredExceptions import ExpiredExceptions
 
 class Instagram:
     def __init__(self) -> {}:
         load_dotenv()
         self.__file = File()
+
         self.__COOKIES = os.getenv('COOKIE')
+        self.__IG_CLAIM = os.getenv('IG_CLAIM')
 
-        self.__main_api = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=150'
-        self.__second_api = 'https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id=3223585292288501499_9884975657'
+        self.__main_api = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
+        self.__second_api = 'https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id='
 
-        self.headers = {
+
+
+
+    def __build_header(self, username: str) -> dict:
+
+        headers = {
             'Accept': '*/*',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-            'Cookie': str(self.__COOKIES),
-            'Dpr': '2',
-            'Referer': 'https://www.instagram.com/jkt48.freya/',
+            'Cookie': self.__COOKIES,
+            'Dpr': '1',
+            'Referer': f'https://www.instagram.com/{username}/',
             'Sec-Ch-Prefers-Color-Scheme': 'dark',
             'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
             'Sec-Ch-Ua-Full-Version-List': '"Not_A Brand";v="8.0.0.0", "Chromium";v="120.0.6099.130", "Google Chrome";v="120.0.6099.130"',
@@ -43,112 +51,126 @@ class Instagram:
             'X-Asbd-Id': '129477',
             'X-Csrftoken': 'VqFUdHhunrwbNuPNn3UgjYlWYMPHrnwD',
             'X-Ig-App-Id': '936619743392459',
-            'X-Ig-Www-Claim': 'hmac.AR3HkuG7h3TIwMO3PJ6UKkzx9pH9Qm5gwQvd0oQNocS8xwqH',
+            'X-Ig-Www-Claim': self.__IG_CLAIM,
             'X-Requested-With': 'XMLHttpRequest'
         }
 
+        return headers
+
+
     def __curl(self, path: str, url: str):
-        request.urlretrieve(url, path)
+        if url: request.urlretrieve(url, path)
+        
 
-    def extract_data(self, document: dict, search_key: str) -> dict:
+    def extract_data(self, document: dict) -> dict:
 
-        results = {
-            "crawling_time": str(datetime.now()),
-            "crawling_time_epoch": int(time()),
-            "search_key": search_key,
-            "status": document["status"],
-            "user": {
-                "username": document["user"]["username"],
-                "full_name": document["user"]["full_name"],
-                "is_private": document["user"]["is_private"],
-                "is_verified": document["user"]["is_verified"],
-                "profile_pic_id": document["user"]["profile_pic_id"],
-                "profile_pic_url": document["user"]["profile_pic_url"],
-            },
-            "contents": [
-                {
-                    "taken_at": content.get("taken_at"),
-                    "id": content.get("id"),
-                    "commerciality_status": content.get("commerciality_status", None),
-                    "explore_hide_comments": content.get("explore_hide_comments", None),
-                    "is_quiet_post": content.get("is_quiet_post", None),
-                    "mezql_token": content.get("mezql_token", None),
-                    "tags": content.get("usertags", {}).get("in", [])[:1],
-                    "photo_of_you": content.get("photo_of_you", None),
-                    "has_liked": content.get("has_liked", None),
-                    "has_privately_liked": content.get("has_privately_liked", None),
-                    "like_count": content.get("like_count", None),
-                    "can_viewer_reshare": content.get("can_viewer_reshare", None),
-                    "video_subtitles": content.get("video_subtitles_uri", None),
-                    "captions": content.get("caption", {}).get("text", None),
-                    "play_count": content.get("play_count", None),
-                    "medias": {
-                        "carousel_media": [medias.get("image_versions2", {}).get("candidates", None) for medias in content.get("carousel_media", {})],
-                        "carousel_video": [medias["video_versions"] for medias in content.get("carousel_media", {}) if medias.get("video_versions")],
-                        "images": content.get("image_versions2", {}).get("candidates", None),
-                        "videos": content.get("video_versions", None),
-                        "video_durations": content.get("video_duration", None),
-                        "audio": {
-                            "music_info": content.get("clips_metadata", {}).get("music_info", None),
-                            "audio_type": content.get("clips_metadata", {}).get("audio_type", None),
-                            "url": content.get("clips_metadata", {}).get("original_sound_info", {}).get("progressive_download_url", None),
-                            "should_mute_audio": content.get("clips_metadata", {}).get("original_sound_info", {}).get("should_mute_audio", None)
-                        }
-                    }
-                        
-                } for content in document["items"]
-            ]
-            
-        }
-
+        results = [
+            {
+                "taken_at": content.get("taken_at"),
+                "id": content.get("id"),
+                "commerciality_status": content.get("commerciality_status", None),
+                "explore_hide_comments": content.get("explore_hide_comments", None),
+                "is_quiet_post": content.get("is_quiet_post", None),
+                "mezql_token": content.get("mezql_token", None),
+                "tags": content.get("usertags", {}).get("in", [])[:1],
+                "photo_of_you": content.get("photo_of_you", None),
+                "has_liked": content.get("has_liked", None),
+                "has_privately_liked": content.get("has_privately_liked", None),
+                "like_count": content.get("like_count", None),
+                "can_viewer_reshare": content.get("can_viewer_reshare", None),
+                "video_subtitles": content.get("video_subtitles_uri", None),
+                "captions": content.get("caption", {}).get("text") if content.get("caption") is not None else None,
+                "play_count": content.get("play_count", None),
+                "medias": {
+                    "carousel_media": [medias.get("image_versions2", {}).get("candidates", None) for medias in content.get("carousel_media", {})],
+                    "carousel_video": [medias["video_versions"] for medias in content.get("carousel_media", {}) if medias.get("video_versions")],
+                    "images": content.get("image_versions2", {}).get("candidates", None),
+                    "videos": content.get("video_versions", None),
+                    "video_durations": content.get("video_duration", None)
+                }
+                    
+            } for content in document["items"]
+        ]
+        
         return results
 
 
-    def main(self):
-        # response = requests.get(url=self.__api, headers=self.headers)
-        # response = requests.get(url='https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id=3223585292288501499_9884975657', headers=self.headers)
-        # ic(response)
-        # ic(response.text)
-        # self.__file.write_json(path='private/response3.json', content=response.json())
+    def main(self, username: str):
 
+        response = requests.get(url=self.__main_api, headers=self.__build_header(username=username))
 
-        file = self.__file.read_json('private/response.json')
-        results = self.extract_data(document=file, search_key="freya")
+        if response.status_code != 200: raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
 
+        if not os.path.exists(f'data/{username}'):
+            os.mkdir(f'data/{username}/images')
+            os.mkdir(f'data/{username}/videos')
+            os.mkdir(f'data/{username}/json')
 
-        for content in tqdm(results["contents"], ascii=True, smoothing=0.1, total=len(results["contents"])):
+        ic(response)
+        
 
-            if content["medias"]["videos"]:
-                self.__curl(
-                    url=content["medias"]["videos"][0]["url"],
-                    path=f"data/videos/{uuid4()}.mp4"
-                    )
-            
-                self.__curl(
-                    url=content["medias"]["audio"]["url"],
-                    path=f"data/audios/{uuid4()}.mp3"
-                    )
+        response = response.json()
 
-            
-            if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
+        results = {
+                "crawling_time": str(datetime.now()),
+                "crawling_time_epoch": int(time()),
+                "search_key": "freya",
+                "status": response["status"],
+                "user": {
+                    "username": response["user"]["username"],
+                    "full_name": response["user"]["full_name"],
+                    "is_private": response["user"]["is_private"],
+                    "is_verified": response["user"]["is_verified"],
+                    "profile_pic_id": response["user"]["profile_pic_id"],
+                    "profile_pic_url": response["user"]["profile_pic_url"],
+                },
+                "contents":[]
+            }
 
-                for medias in content["medias"]["carousel_media"]:
-                    max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
+        next_max_id = response["next_max_id"]
+        while True:
+
+            contents = self.extract_data(document=response)
+
+            results["contents"].append(contents)
+
+            for content in tqdm(contents, ascii=True, smoothing=0.1, total=len(contents)):
+
+                if content["medias"]["videos"]:
                     self.__curl(
-                        url=max_resolution["url"],
-                        path=f"data/images/{uuid4()}.jpg"
-                        )
-                    
-                
-                for videos in content["medias"]["carousel_video"]:
-                    max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
-                    self.__curl(
-                        url=max_resolution["url"],
-                        path=f"data/videos/{uuid4()}.mp4"
+                        url=content["medias"]["videos"][0]["url"],
+                        path=f"data/{username}/videos/{uuid4()}.mp4"
                         )
 
 
-        self.__file.write_json(path=f'data/json/{results["user"]["username"]}.json', content=results)
+                if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
 
-        # ic(len(file['items']))
+                    for medias in content["medias"]["carousel_media"]:
+                        max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
+                        self.__curl(
+                            url=max_resolution["url"],
+                            path=f"data/{username}/images/{uuid4()}.jpg"
+                            )
+
+
+                    for videos in content["medias"]["carousel_video"]:
+                        max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
+                        self.__curl(
+                            url=max_resolution["url"],
+                            path=f"data/{username}/videos/{uuid4()}.mp4"
+                            )
+                        
+            
+
+            if not next_max_id: break
+
+            response = requests.get(url=f'{self.__second_api}{next_max_id}', headers=self.__build_header(username=username))
+            ic(response)
+            response = response.json()
+
+            next_max_id = response.get("next_max_id", None)
+            
+
+
+        self.__file.write_json(path=f'data/{username}/json/{username}.json', content=results)
         
