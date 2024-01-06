@@ -18,11 +18,11 @@ class Instagram:
         load_dotenv()
         self.__file = File()
 
-        self.__COOKIES = os.getenv('COOKIE')
+        self.__COOKIES = os.getenv('COOKIES')
         self.__IG_CLAIM = os.getenv('IG_CLAIM')
 
         self.__main_api = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
-        self.__second_api = 'https://www.instagram.com/api/v1/feed/user/9884975657/?count=12&max_id='
+        self.__second_api = 'https://www.instagram.com/api/v1/feed/user/59794650398/?count=12&max_id='
 
 
 
@@ -59,7 +59,10 @@ class Instagram:
 
 
     def __curl(self, path: str, url: str):
-        if url: request.urlretrieve(url, path)
+        try:
+            if url: request.urlretrieve(url, path)
+        except Exception:
+            ic('eror')
         
 
     def extract_data(self, document: dict) -> dict:
@@ -95,20 +98,20 @@ class Instagram:
         return results
 
 
-    def main(self, username: str):
+    def main(self, username: str, user_id: str):
 
-        response = requests.get(url=self.__main_api, headers=self.__build_header(username=username))
+        response = requests.get(url=f'https://www.instagram.com/api/v1/feed/user/{username}/username/?count=12', headers=self.__build_header(username=username))
 
+        ic(response)
         if response.status_code != 200: raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
 
         if not os.path.exists(f'data/{username}'):
+            os.mkdir(f'data/{username}')
             os.mkdir(f'data/{username}/images')
             os.mkdir(f'data/{username}/videos')
             os.mkdir(f'data/{username}/json')
 
-        ic(response)
         
-
         response = response.json()
 
         results = {
@@ -127,7 +130,7 @@ class Instagram:
                 "contents":[]
             }
 
-        next_max_id = response["next_max_id"]
+        next_max_id = response.get("next_max_id", None)
         while True:
 
             contents = self.extract_data(document=response)
@@ -141,7 +144,6 @@ class Instagram:
                         url=content["medias"]["videos"][0]["url"],
                         path=f"data/{username}/videos/{uuid4()}.mp4"
                         )
-
 
                 if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
 
@@ -164,7 +166,7 @@ class Instagram:
 
             if not next_max_id: break
 
-            response = requests.get(url=f'{self.__second_api}{next_max_id}', headers=self.__build_header(username=username))
+            response = requests.get(url=f'https://www.instagram.com/api/v1/feed/user/{user_id}/?count=12&max_id={next_max_id}', headers=self.__build_header(username=username))
             ic(response)
             response = response.json()
 
