@@ -21,8 +21,9 @@ class Instagram:
         self.__COOKIES = os.getenv('COOKIES')
         self.__IG_CLAIM = os.getenv('IG_CLAIM')
 
-        self.__main_api = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
-        self.__second_api = 'https://www.instagram.com/api/v1/feed/user/59794650398/?count=12&max_id='
+        self.__MAIN_API = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
+        self.__SECOND_API = 'https://www.instagram.com/api/v1/feed/user/59794650398/?count=12&max_id='
+        self.__USER_ID_API = 'https://www.instagram.com/web/search/topsearch/?query='
 
 
 
@@ -98,11 +99,13 @@ class Instagram:
         return results
 
 
-    def main(self, username: str, user_id: str):
+    def main(self, username: str):
 
         response = requests.get(url=f'https://www.instagram.com/api/v1/feed/user/{username}/username/?count=12', headers=self.__build_header(username=username))
+        user_id = requests.get(url=self.__USER_ID_API+username, headers=self.__build_header(username=username))
+        
 
-        ic(response)
+        user_id = user_id.json()['users'][0]['user']['pk_id']
         if response.status_code != 200: raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
 
         if not os.path.exists(f'data/{username}'):

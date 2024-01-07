@@ -8,16 +8,25 @@ class ArgumentParserCustom(ArgumentParser):
 to run please insert flags
 
 --usernmae    or -e    YOUR_EMAIL
-                      
-if your COOKIES and IG CLAIM is expired please insert this flag for update your env
-                      
---cookies   or -p    YOUR_COOKIES
---igclaim   or -s    YOUR_IG_CLAIM
 
-Example: python main.py --username jkt48.freya --cookies dfcgvjkml --igclaim waesdfcgvbhjn
+                   ⚠️ATTENTIONS⚠️                      
+if your COOKIES and IG CLAIM is expired please insert this flag for update your env,
+and wrap the cookies in single quotes '<YOUR_COOKIES>'
                       
-                      OR
+--cookies   or -p    '<YOUR_COOKIES>'
+--igclaim   or -s    '<YOUR_IG_CLAIM>'
 
-Example: python main.py --username jkt48.freya
+                      
+                   ⚠️SUGGESTION⚠️
+or if you don't understand you can run the update cookies.py file
+                      
+
+                 ⚠️EXAMPLE USAGES⚠️
+
+python main.py --username jkt48.freya --userid 34567890 --cookies 'dfcgvjkml' --igclaim 'waesdfcgvbhjn'
+                      
+                       ⚠️OR⚠️
+
+python main.py --username jkt48.freya --userid 34567890 
 """)
             sys.exit(status)
