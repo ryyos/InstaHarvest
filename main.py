@@ -19,12 +19,12 @@ if __name__ == '__main__':
     arg.add_argument('--igclaim', '-ic', type=str, help='Insert your IG CLAIM')
     arg = arg.parse_args()
 
-    if arg.cookies:
+    if arg.cookies and arg.igclaim:
         print(arg.cookies)
         load_dotenv()
 
         file_env = find_dotenv()
-        set_key(file_env, 'COOKIES', arg.cookies.replace('&', '; '))
+        set_key(file_env, 'COOKIES', arg.cookies.replace('\\', '\\\\'))
         set_key(file_env, 'IG_CLAIM', arg.igclaim)
 
     try:

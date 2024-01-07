@@ -104,7 +104,6 @@ class Instagram:
         response = requests.get(url=f'https://www.instagram.com/api/v1/feed/user/{username}/username/?count=12', headers=self.__build_header(username=username))
         user_id = requests.get(url=self.__USER_ID_API+username, headers=self.__build_header(username=username))
         
-
         user_id = user_id.json()['users'][0]['user']['pk_id']
         if response.status_code != 200: raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
 
