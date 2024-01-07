@@ -18,7 +18,7 @@ and wrap the cookies in single quotes '<YOUR_COOKIES>'
 
                       
                    ⚠️SUGGESTION⚠️
-or if you don't understand you can run the update cookies.py file
+or if you don't understand you can run the update_component.py file
                       
 
                  ⚠️EXAMPLE USAGES⚠️

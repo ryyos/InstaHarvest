@@ -1,5 +1,4 @@
 import requests
-import asyncio
 import os
 
 from tqdm import tqdm
