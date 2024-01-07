@@ -11,5 +11,5 @@ if __name__ == '__main__':
 
     load_dotenv()
     file_env = find_dotenv()
-    set_key(file_env, 'COOKIES', cookies)
+    set_key(file_env, 'COOKIES', cookies.replace('\\', '\\\\'))
     set_key(file_env, 'IG_CLAIM', claim)

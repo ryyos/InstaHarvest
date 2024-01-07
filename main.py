@@ -20,7 +20,6 @@ if __name__ == '__main__':
     arg = arg.parse_args()
 
     if arg.cookies and arg.igclaim:
-        print(arg.cookies)
         load_dotenv()
 
         file_env = find_dotenv()
