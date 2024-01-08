@@ -19,6 +19,7 @@ class Instagram:
 
         self.__COOKIES = os.getenv('COOKIES')
         self.__IG_CLAIM = os.getenv('IG_CLAIM')
+        self.__PATH_TO_SAVE = os.getenv('PATH_TO_SAVE')
 
         self.__MAIN_API = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
         self.__SECOND_API = 'https://www.instagram.com/api/v1/feed/user/59794650398/?count=12&max_id='
@@ -106,11 +107,11 @@ class Instagram:
         user_id = user_id.json()['users'][0]['user']['pk_id']
         if response.status_code != 200: raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
 
-        if not os.path.exists(f'data/{username}'):
-            os.mkdir(f'data/{username}')
-            os.mkdir(f'data/{username}/images')
-            os.mkdir(f'data/{username}/videos')
-            os.mkdir(f'data/{username}/json')
+        if not os.path.exists(f'{self.__PATH_TO_SAVE}/{username}'):
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}')
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/images')
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/videos')
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/json')
 
         
         response = response.json()
@@ -143,7 +144,7 @@ class Instagram:
                 if content["medias"]["videos"]:
                     self.__curl(
                         url=content["medias"]["videos"][0]["url"],
-                        path=f"data/{username}/videos/{uuid4()}.mp4"
+                        path=f"{self.__PATH_TO_SAVE}/{username}/videos/{uuid4()}.mp4"
                         )
 
                 if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
@@ -152,7 +153,7 @@ class Instagram:
                         max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"data/{username}/images/{uuid4()}.jpg"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/images/{uuid4()}.jpg"
                             )
 
 
@@ -160,7 +161,7 @@ class Instagram:
                         max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"data/{username}/videos/{uuid4()}.mp4"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/videos/{uuid4()}.mp4"
                             )
                         
             
@@ -175,5 +176,5 @@ class Instagram:
             
 
 
-        self.__file.write_json(path=f'data/{username}/json/{username}.json', content=results)
+        self.__file.write_json(path=f'{self.__PATH_TO_SAVE}/{username}/json/{username}.json', content=results)
         

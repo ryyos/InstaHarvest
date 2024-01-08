@@ -3,6 +3,7 @@ import os
 from dotenv import *
 from src import Instagram
 from src import ArgumentParserCustom
+from src import PathNotFoundExceptions
 from src import ExpiredExceptions
 from src import file
 
@@ -28,5 +29,8 @@ if __name__ == '__main__':
 
     try:
         instagram.main(username=arg.username)
-    except Exception:
-        raise ExpiredExceptions('your COOKIES or IG CLAIM is Expired, Update Please!')
+
+    except KeyError:
+        raise ExpiredExceptions()
+    except FileNotFoundError:
+        raise PathNotFoundExceptions()

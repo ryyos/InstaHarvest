@@ -7,7 +7,7 @@ class ArgumentParserCustom(ArgumentParser):
                 print("""
 to run please insert flags
 
---usernmae    or -e    YOUR_EMAIL
+--username    or -e   <USERNAME_TARGET>
 
                    ⚠️ATTENTIONS⚠️                      
 if your COOKIES and IG CLAIM is expired please insert this flag for update your env,
@@ -23,10 +23,10 @@ or if you don't understand you can run the update_component.py file
 
                  ⚠️EXAMPLE USAGES⚠️
 
-python main.py --username jkt48.freya --userid 34567890 --cookies 'dfcgvjkml' --igclaim 'waesdfcgvbhjn'
+python main.py --username jkt48.freya --cookies 'dfcgvjkml' --igclaim 'waesdfcgvbhjn'
                       
                        ⚠️OR⚠️
 
-python main.py --username jkt48.freya --userid 34567890 
+python main.py --username jkt48.freya
 """)
             sys.exit(status)
