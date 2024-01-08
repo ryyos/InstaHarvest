@@ -98,11 +98,12 @@ python update_component.py
 
 ## Flags
 
-|    Flag    | Alias |          Descriptions          |         Example         |
-| :--------: | :---: | :----------------------------: | :---------------------: |
-| --username |  -u   | Insert username account target | --username freya.jkt48  |
-| --cookies  |  -c   |      Insert your cookies       | --cookies 'sxdfcgvbhnj' |
-| --igclaim  |  -ic  |   Insert your X-Ig-Www-Claim   | --igclaim 'dcfvgbhjnmk' |
+|    Flag    | Alias |           Descriptions            |         Example         |
+| :--------: | :---: | :-------------------------------: | :---------------------: |
+| --username |  -u   |  Insert username account target   | --username freya.jkt48  |
+| --cookies  |  -c   |        Insert your cookies        | --cookies 'sxdfcgvbhnj' |
+| --igclaim  |  -ic  |    Insert your X-Ig-Www-Claim     | --igclaim 'dcfvgbhjnmk' |
+|   --path   |  -p   | Insert your PATH you want to save |  --path 'data/content'  |
 
 ## 🚀Structure
 
@@ -121,6 +122,7 @@ python update_component.py
     │
     ├───exceptions
     │       ExpiredExceptions.py
+    │       PathNotFoundExceptions.py
     │
     ├───service
     │       instagram.py
