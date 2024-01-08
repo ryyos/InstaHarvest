@@ -5,7 +5,7 @@
 
 > This program is a program that can be used to retrieve data from Instagram and download their content
 
-## Feature
+## Feature ✨
 
 - Using requests instead of webdriver makes it lighter and faster
 - use of cookies and check expiration so you don't need to always log in
@@ -14,14 +14,14 @@
 - providing an update_component file to make it easier for those who have difficulty using the flag command
 - The download quality does not decrease and the quality will remain the same as the original quality of the post
 
-## Tech
+## Tech 💻
 
 - [python-dotenv](https://pypi.org/project/python-dotenv/) is a convenient Python library that simplifies the management of environment variables in your projects. It allows you to load variables from a .env file into your environment, making it easy to configure and control settings for your applications.
 - [icecream](https://github.com/gruns/icecream) is a Python library that provides a simple and informative way to log code, helping with monitoring program execution flows.
 - [requests](https://requests.readthedocs.io/) is an easy-to-use Python library for interacting with APIs and making HTTP requests.
 - [tqdm](https://tqdm.github.io/) is a Python library that provides an aesthetic progress bar to monitor the execution process in iterations.
 
-## Requirement
+## Requirement ⚙️
 
 - [Python](https://www.python.org/) v3.11.6+
 - [icecream](https://github.com/gruns/icecream) v2.1.3+
@@ -29,7 +29,7 @@
 - [requests](https://requests.readthedocs.io/) v2.31.0+
 - [tqdm](https://tqdm.github.io/) v4.66.1+
 
-## Installation
+## Installation 🛠️
 
 > To run this program you need to install some libraries with the command
 
@@ -96,7 +96,7 @@ python update_component.py
 
 7. Copy Cookies and X-Ig-Www-Claim to insert into the code above
 
-## Flags
+## Flags 🚩
 
 |    Flag    | Alias |           Descriptions            |         Example         |
 | :--------: | :---: | :-------------------------------: | :---------------------: |
@@ -132,7 +132,7 @@ python update_component.py
             file.py
 ```
 
-## Author
+## Author 🧑‍💻
 
 👤 **Rio Dwi Saputra**
 
