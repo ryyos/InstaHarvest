@@ -21,8 +21,6 @@ class Instagram:
         self.__IG_CLAIM = os.getenv('IG_CLAIM')
         self.__PATH_TO_SAVE = os.getenv('PATH_TO_SAVE')
 
-        self.__MAIN_API = 'https://www.instagram.com/api/v1/feed/user/jkt48.freya/username/?count=12'
-        self.__SECOND_API = 'https://www.instagram.com/api/v1/feed/user/59794650398/?count=12&max_id='
         self.__USER_ID_API = 'https://www.instagram.com/web/search/topsearch/?query='
 
 

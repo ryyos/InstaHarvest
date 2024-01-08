@@ -51,7 +51,7 @@ cd InstaHarvest
 To run the program the first time you have to include several flags
 
 ```bash
-python main.py --username target_username --cookies '<YOUR_COOKIES>' --igclaim '<YOUR-X-Ig-Www-Claim>'
+python main.py --username target_username --cookies '<YOUR_COOKIES>' --igclaim '<YOUR-X-Ig-Www-Claim>' --path
 ```
 
 or if you don't understand you can run the update_component.py file
