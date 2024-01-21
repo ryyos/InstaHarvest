@@ -7,7 +7,7 @@ from src import PathNotFoundExceptions
 from src import ExpiredExceptions
 from src import file
 
-#v.0.0.3
+#v.0.0.4
 if __name__ == '__main__':
 
     if not os.path.exists('.env'): file.write('.env', '')
@@ -22,10 +22,11 @@ if __name__ == '__main__':
     arg.add_argument('--path', '-p', type=str, help='Insert your PATH TO SAVE')
     arg = arg.parse_args()
 
+    file_env = find_dotenv()
+
     if arg.cookies and arg.igclaim:
         load_dotenv()
 
-        file_env = find_dotenv()
         set_key(file_env, 'COOKIES', arg.cookies.replace('\\', '\\\\'))
         set_key(file_env, 'IG_CLAIM', arg.igclaim)
 

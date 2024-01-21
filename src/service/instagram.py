@@ -60,8 +60,8 @@ class Instagram:
     def __curl(self, path: str, url: str):
         try:
             if url: request.urlretrieve(url, path)
-        except Exception:
-            ic('eror')
+        except Exception as err:
+            ic(err)
         
 
     def extract_data(self, document: dict) -> dict:
@@ -107,8 +107,8 @@ class Instagram:
 
         if not os.path.exists(f'{self.__PATH_TO_SAVE}/{username}'):
             os.mkdir(f'{self.__PATH_TO_SAVE}/{username}')
-            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/images')
-            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/videos')
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/{username}_images')
+            os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/{username}_videos')
             os.mkdir(f'{self.__PATH_TO_SAVE}/{username}/json')
 
         
@@ -117,7 +117,7 @@ class Instagram:
         results = {
                 "crawling_time": str(datetime.now()),
                 "crawling_time_epoch": int(time()),
-                "search_key": "freya",
+                "search_key": username,
                 "status": response["status"],
                 "user": {
                     "username": response["user"]["username"],
