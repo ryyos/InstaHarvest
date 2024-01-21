@@ -142,7 +142,7 @@ class Instagram:
                 if content["medias"]["videos"]:
                     self.__curl(
                         url=content["medias"]["videos"][0]["url"],
-                        path=f"{self.__PATH_TO_SAVE}/{username}/videos/{uuid4()}.mp4"
+                        path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{uuid4()}.mp4"
                         )
 
                 if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
@@ -151,7 +151,7 @@ class Instagram:
                         max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"{self.__PATH_TO_SAVE}/{username}/images/{uuid4()}.jpg"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_images/{uuid4()}.jpg"
                             )
 
 
@@ -159,7 +159,7 @@ class Instagram:
                         max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"{self.__PATH_TO_SAVE}/{username}/videos/{uuid4()}.mp4"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{uuid4()}.mp4"
                             )
                         
             
