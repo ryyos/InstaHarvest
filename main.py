@@ -7,7 +7,7 @@ from src import PathNotFoundExceptions
 from src import ExpiredExceptions
 from src import file
 
-#v.0.0.4
+#v.0.0.5
 if __name__ == '__main__':
 
     if not os.path.exists('.env'): file.write('.env', '')

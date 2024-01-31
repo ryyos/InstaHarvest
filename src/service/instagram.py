@@ -135,23 +135,24 @@ class Instagram:
 
             contents = self.extract_data(document=response)
 
-            results["contents"].append(contents)
+            # results["contents"].append(contents)
 
             for content in tqdm(contents, ascii=True, smoothing=0.1, total=len(contents)):
 
                 if content["medias"]["videos"]:
                     self.__curl(
                         url=content["medias"]["videos"][0]["url"],
-                        path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{uuid4()}.mp4"
+                        path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{str(round(time() * 1000))}.mp4"
                         )
 
                 if content["medias"]["carousel_media"] or content["medias"]["carousel_video"]:
 
                     for medias in content["medias"]["carousel_media"]:
-                        max_resolution = max(medias, key=lambda x: x['width'] * x['height'])
+                        max_resolution = max(medias, key=lambda x: x['width'] * x['height'] if x['width'] != x['height'] else 0)
+
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_images/{uuid4()}.jpg"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_images/{str(round(time() * 1000))}.jpg"
                             )
 
 
@@ -159,7 +160,7 @@ class Instagram:
                         max_resolution = max(videos, key=lambda x: x['width'] * x['height'])
                         self.__curl(
                             url=max_resolution["url"],
-                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{uuid4()}.mp4"
+                            path=f"{self.__PATH_TO_SAVE}/{username}/{username}_videos/{str(round(time() * 1000))}.mp4"
                             )
                         
             

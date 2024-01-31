@@ -7,7 +7,7 @@ class ArgumentParserCustom(ArgumentParser):
                 print("""
 to run please insert flags
 
---username    or -e   <USERNAME_TARGET>
+--username    or -u   <USERNAME_TARGET>
 
                    ⚠️ATTENTIONS⚠️                      
 if your COOKIES and IG CLAIM is expired please insert this flag for update your env,

@@ -1,9 +1,9 @@
-<h1 align="center" >Hello 👋, I'm Ryo</h1>
-<h3 align="center" >An independent backend developer</h3>
+# InstaHarvest
 
-<h1 align="center" >Welcome To InstaHarvest🍁</h1>
+![Version](https://img.shields.io/badge/version-0.0.5-green.svg?cacheSeconds=2592000)
+![ProjectImage](https://raw.githubusercontent.com/ryyos/ryyos/main/images/erine/kawai.jpg)
 
-> This program is a program that can be used to retrieve data from Instagram and download their content
+**This program is a program that can be used to retrieve data from Instagram and download their content**
 
 ## Feature ✨
 
@@ -31,7 +31,7 @@
 
 ## Installation 🛠️
 
-> To run this program you need to install some libraries with the command
+**To run this program you need to install some libraries with the command**
 
 ```sh
 pip install -r requirements.txt
@@ -74,7 +74,7 @@ python update_component.py
 
    <br>
    <div style="text-align: center;">
-     <img src="https://raw.githubusercontent.com/ryosoraa/ryosoraa/main/images/Screenshot%202024-01-07%20175904.png", width="600" height="315 "> 
+     <img src="https://raw.githubusercontent.com/ryosoraa/ryosoraa/main/images/Screenshot%202024-01-07%20175904.png"> 
    </div>
    <br>
 
@@ -136,14 +136,14 @@ python update_component.py
 
 👤 **Rio Dwi Saputra**
 
-- Twitter: [@ryosora12](https://twitter.com/ryosora12)
-- Github: [@ryosoraa](https://github.com/ryosoraa)
+- Twitter: [@ryyo_cs](https://twitter.com/ryyo_cs)
+- Github: [@ryyos](https://github.com/ryyos)
 - LinkedIn: [@rio-dwi-saputra-23560b287](https://www.linkedin.com/in/rio-dwi-saputra-23560b287/)
-- Instagram: [@ryosoraa](https://www.instagram.com/ryosoraaa/)
+- Instagram: [@ryyo.cs](https://www.instagram.com/ryyo.cs/)
 
-<a href="https://www.linkedin.com/in/ryosora/">
+<a href="https://www.linkedin.com/in/rio-dwi-saputra-23560b287/">
   <img align="left" alt="Ryo's LinkedIn" width="24px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />
 </a>
-<a href="https://www.instagram.com/ryosoraaa/">
+<a href="https://www.instagram.com/ryyo.cs/">B
   <img align="left" alt="Ryo's Instagram" width="24px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/instagram.svg" /> 
 </a>
